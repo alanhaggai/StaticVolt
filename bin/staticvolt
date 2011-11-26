@@ -4,8 +4,6 @@ use strict;
 use warnings;
 
 use StaticVolt;
-use StaticVolt::Convertor::Markdown;
-use StaticVolt::Convertor::Textile;
 
 my $staticvolt = StaticVolt->new(
     'includes'    => '_includes',

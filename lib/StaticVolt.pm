@@ -14,6 +14,9 @@ use YAML;
 
 use base qw( StaticVolt::Convertor );
 
+use StaticVolt::Convertor::Markdown;
+use StaticVolt::Convertor::Textile;
+
 sub new {
     my ( $class, %config ) = @_;
 
