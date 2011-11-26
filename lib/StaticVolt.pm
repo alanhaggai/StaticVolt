@@ -17,11 +17,18 @@ use base qw( StaticVolt::Convertor );
 sub new {
     my ( $class, %config ) = @_;
 
-    $config{'source'}      = $config{'source'}      || '_source';
-    $config{'destination'} = $config{'destination'} || '_build';
+    my %config_defaults = (
+        'includes'    => '_includes',
+        'layouts'     => '_layouts',
+        'source'      => '_source',
+        'destination' => '_destination',
+    );
 
-    $config{'source'}      = File::Spec->canonpath( $config{'source'} );
-    $config{'destination'} = File::Spec->canonpath( $config{'destination'} );
+    for my $config_key ( keys %config_defaults ) {
+        $config{$config_key} = $config{$config_key}
+          || $config_defaults{$config_key};
+        $config{$config_key} = File::Spec->canonpath( $config{$config_key} );
+    }
 
     return bless \%config, $class;
 }
