@@ -1,0 +1,16 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use StaticVolt;
+use StaticVolt::Convertor::Markdown;
+use StaticVolt::Convertor::Textile;
+
+my $staticvolt = StaticVolt->new(
+    'includes'    => '_includes',
+    'layouts'     => '_layouts',
+    'source'      => '_source',
+    'destination' => '_site',
+);
+$staticvolt->compile;
