@@ -1,5 +1,8 @@
 #!/usr/bin/env perl
 
+# PODNAME:  staticvolt
+# ABSTRACT: Static website generator
+
 use strict;
 use warnings;
 

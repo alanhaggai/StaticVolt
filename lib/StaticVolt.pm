@@ -1,3 +1,5 @@
+# ABSTRACT: Static website generator
+
 package StaticVolt;
 
 use strict;
