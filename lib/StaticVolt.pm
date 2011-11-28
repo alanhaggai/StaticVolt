@@ -159,3 +159,210 @@ sub compile {
 }
 
 1;
+
+__END__
+
+=head1 SYNOPSIS
+
+    use StaticVolt;
+
+    my $staticvolt = StaticVolt->new;  # Default configuration
+    $staticvolt->compile;
+
+=method C<new>
+
+Accepts an optional hash with the following parametres:
+
+    # Override configuration (parametres set explicitly)
+    my $staticvolt = StaticVolt->new(
+        'includes'    => '_includes',
+        'layouts'     => '_layouts',
+        'source'      => '_source',
+        'destination' => '_destination',
+    );
+
+=over 4
+
+=item * C<includes>
+
+Specifies the directory in which to search for template files. By default, it
+is set to C<_includes>.
+
+=item * C<layouts>
+
+Specifies the directory in which to search for layouts or wrappers. By default,
+it is set to C<_layouts>.
+
+=item * C<source>
+
+Specifies the directory in which source files reside. Source files are files
+which will be compiled to HTML if they have a registered convertor and a YAML
+configuration in the beginning. By default, it is set to C<_source>.
+
+=item * C<destination>
+
+This directory will be created if it does not exist. Compiled and output files
+are placed in this directory. By default, it is set to C<_destination>.
+
+=back
+
+=method C<compile>
+
+Each file in the L</C<source>> directory is checked to see if it has a
+registered convertor as well as a YAML configuration at the beginning. All such
+files are compiled considering the L</YAML Configuration Keys> and the compiled
+output is placed in the L</C<destination>> directory. The rest of the files are
+copied over to the L</C<destination>> without compiling.
+
+=head2 YAML Configuration Keys
+
+L</YAML Configuration Keys> should be placed at the beginning of the file and
+should be enclosed within a pair of C<--->.
+
+Example of using a layout along with a custom key and compiling a markdown
+L</C<source>> file:
+
+L</layout> file - C<main.html>:
+
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title></title>
+        </head>
+        <body>
+            [% content %]
+        </body>
+    </html>
+
+L</source> file - C<index.markdown>:
+
+    ---
+    layout: main.html
+    drink : water
+    ---
+    Drink **plenty** of [% drink %].
+
+L</destination> (output/compiled) file - C<index.html>:
+
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title></title>
+        </head>
+        <body>
+            <p>Drink <strong>plenty</strong> of water.</p>
+
+        </body>
+    </html>
+
+=over 4
+
+=item * C<layout>
+
+Uses the corresponding layout or wrapper to wrap the compiled content. Note that
+C<content> is a special variable used in C<L<Template Toolkit|Template>> along
+with wrappers. This variable contains the processed wrapped content. In essence,
+the output/compiled file will have the C<content> variable replaced with the
+compiled L</C<source>> file.
+
+=item * C<I<custom keys>>
+
+These keys will be available for use in the same page as well as in the layout.
+In the above example, C<drink> is a custom key.
+
+=back
+
+=head1 Walkthrough
+
+Consider the source file C<index.markdown> which contains:
+
+    ---
+    layout : main.html
+    title  : Just an example title
+    heading: StaticVolt Example
+    ---
+
+    StaticVolt Example
+    ==================
+
+    This is an **example** page.
+
+Let C<main.html> which is a wrapper or layout contain:
+
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>[% title %]</title>
+        </head>
+        <body>
+            [% content %]
+        </body>
+    </html>
+
+During compilation, all variables defined as L</YAML Configuration Keys> at the
+beginning of the file will be processed and be replaced by their values in the
+output file C<index.html>. A registered convertor
+(C<L<StaticVolt::Convertor::Markdown>>) is used to convert the markdown text to
+HTML.
+
+Compiled output file C<index.html> contains:
+
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Just an example title</title>
+        </head>
+        <body>
+            <h1>StaticVolt Example</h1>
+            <p>This is an <strong>example</strong> page.</p>
+
+        </body>
+    </html>
+
+=head1 Default Convertors
+
+=over 4
+
+=item * C<L<StaticVolt::Convertor::Markdown>>
+
+=item * C<L<StaticVolt::Convertor::Textile>>
+
+=back
+
+=head1 How to build a convertor?
+
+The convertor should inherit from L<C<StaticVolt::Convertor>>. Define a
+subroutine named C<L<StaticVolt::Convertor/convert>> that takes a single argument. This argument should
+be converted to HTML and returned.
+
+Register filename extensions by calling the C<register> method inherited from
+L<C<StaticVolt::Convertor>>. C<register> accepts a list of filename extensions.
+
+A convertor template that implements conversion from a hypothetical format
+I<FooBar>:
+
+    package StaticVolt::Convertor::FooBar;
+
+    use strict;
+    use warnings;
+
+    use base qw( StaticVolt::Convertor );
+
+    use Foo::Bar qw( foobar );
+
+    sub convert {
+        my $content = shift;
+        return foobar $content;
+    }
+
+    # Handle files with the extensions:
+    #   .foobar, .fb, .fbar, .foob
+    __PACKAGE__->register(qw/ foobar fb fbar foob /);
+
+=head1 Inspiration
+
+L<StaticVolt> is inspired by Tom Preston-Werner's L<Jekyll|http://jekyllrb.com/>.
+
+=head1 See Also
+
+L<Template Toolkit|Template>
