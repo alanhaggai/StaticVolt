@@ -30,3 +30,20 @@ sub register {
 }
 
 1;
+
+__END__
+
+=method C<has_convertor>
+
+Accepts a filename extension and returns a boolean result which indicates
+whether the particular extension has a registered convertor or not.
+
+=method C<convert>
+
+Accepts content and filename extension as the parametres. Returns HTML after
+converting the content using the convertor registered for that extension.
+
+=func C<register>
+
+Accepts a list of filename extensions and registers a convertor for each
+extension.
