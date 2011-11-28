@@ -15,3 +15,13 @@ sub convert {
 __PACKAGE__->register(qw/ textile /);
 
 1;
+
+__END__
+
+=head1 Registered Extensions
+
+=over 4
+
+=item * C<textile>
+
+=back

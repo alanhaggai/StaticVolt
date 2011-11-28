@@ -15,3 +15,17 @@ sub convert {
 __PACKAGE__->register(qw/ markdown md mkd /);
 
 1;
+
+__END__
+
+=head1 Registered Extensions
+
+=over 4
+
+=item * C<markdown>
+
+=item * C<md>
+
+=item * C<mkd>
+
+=back
