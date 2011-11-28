@@ -1,0 +1,1 @@
+This file and its parent directory should be removed during compilation.
