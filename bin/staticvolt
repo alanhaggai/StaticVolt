@@ -1,0 +1,17 @@
+#!/usr/bin/env perl
+
+# PODNAME:  staticvolt
+# ABSTRACT: Static website generator
+
+use strict;
+use warnings;
+
+use StaticVolt;
+
+my $staticvolt = StaticVolt->new(
+    'includes'    => '_includes',
+    'layouts'     => '_layouts',
+    'source'      => '_source',
+    'destination' => '_site',
+);
+$staticvolt->compile;
