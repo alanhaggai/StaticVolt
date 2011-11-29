@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use File::Spec;
-use Test::More 'tests' => 5;
+use Test::More 'tests' => 4;
 
 use StaticVolt;
 
@@ -17,8 +17,8 @@ my $staticvolt = StaticVolt->new(
 isa_ok $staticvolt, 'StaticVolt';
 
 my $qux_dir = File::Spec->catdir( 't', '_site', 'qux' );
-ok -d $qux_dir, q{Directory 'qux' exists};
 
+mkdir $qux_dir;
 $staticvolt->compile;
 
 # Check that the qux directory has been removed during compile
