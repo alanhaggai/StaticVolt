@@ -1,3 +1,5 @@
+# ABSTRACT: StaticVolt convertor for markdown
+
 package StaticVolt::Convertor::Markdown;
 
 use strict;

@@ -1,3 +1,5 @@
+# ABSTRACT: StaticVolt convertor for textile
+
 package StaticVolt::Convertor::Textile;
 
 use strict;

@@ -1,3 +1,5 @@
+# ABSTRACT: Base class for StaticVolt convertors
+
 package StaticVolt::Convertor;
 
 use strict;
