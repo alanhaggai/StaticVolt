@@ -26,7 +26,7 @@ sub new {
         'includes'    => '_includes',
         'layouts'     => '_layouts',
         'source'      => '_source',
-        'destination' => '_destination',
+        'destination' => '_site',
     );
 
     for my $config_key ( keys %config_defaults ) {
@@ -171,14 +171,14 @@ __END__
 
 =method C<new>
 
-Accepts an optional hash with the following parametres:
+Accepts an optional hash with the following parameters:
 
-    # Override configuration (parametres set explicitly)
+    # Override configuration (parameters set explicitly)
     my $staticvolt = StaticVolt->new(
         'includes'    => '_includes',
         'layouts'     => '_layouts',
         'source'      => '_source',
-        'destination' => '_destination',
+        'destination' => '_site',
     );
 
 =over 4
@@ -202,7 +202,7 @@ configuration in the beginning. By default, it is set to C<_source>.
 =item * C<destination>
 
 This directory will be created if it does not exist. Compiled and output files
-are placed in this directory. By default, it is set to C<_destination>.
+are placed in this directory. By default, it is set to C<_site>.
 
 =back
 
