@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use File::Spec;
+use File::Path qw( make_path );
 use Test::More 'tests' => 4;
 
 use StaticVolt;
@@ -18,7 +19,7 @@ isa_ok $staticvolt, 'StaticVolt';
 
 my $qux_dir = File::Spec->catdir( 't', '_site', 'qux' );
 
-mkdir $qux_dir;
+make_path $qux_dir;
 $staticvolt->compile;
 
 # Check that the qux directory has been removed during compile
@@ -31,8 +32,10 @@ ok -e $foo_file, q{File 'foo.html' exists};
 # Analyse the contents of foo.html
 open my $fh, '<', $foo_file or die "Error: $!";
 my $contents = do { local $/; <$fh> };
-ok $contents eq <<'CONTENTS', 'Markdown compiled to HTML';
+is $contents, <<'CONTENTS', 'Markdown compiled to HTML';
 <p>
 <strong>StaticVolt</strong> generates <em>static websites</em>.</p>
+
+<p>Relative base: ./</p>
 
 CONTENTS
