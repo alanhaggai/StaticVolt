@@ -318,9 +318,9 @@ layout file:
 
     <link rel="stylesheet" type="text/css" href="[% sv_rel_base %]css/bootstrap.css" />
 
-For top level source files, this expands to nothing (the empty
-string). For any sub-directories, it expands to C<../>, C<../../>
-etc. Sub-directory expansions always include the trailing slash.
+For top level source files, this expands to C<./>. For any
+sub-directories, it expands to C<../>, C<../../> etc. Sub-directory
+expansions always include the trailing slash.
 
 =back
 
