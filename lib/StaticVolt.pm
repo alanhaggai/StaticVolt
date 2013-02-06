@@ -142,6 +142,8 @@ sub compile {
               $self->convert( $source_file_content, $extension );
         }
 
+        $file_config->{sv_rel_base} = $self->_relative_path ( $destination_file );
+
         open my $fh_destination_file, '>', $destination_file
           or die "Failed to open $destination_file for output: $!";
         if ($file_layout) {
@@ -158,6 +160,22 @@ sub compile {
     }
 }
 
+
+sub _relative_path {
+
+    my ($self,$dest_file) = @_;
+
+    my ($dummy1,$dest_file_dir,$dummy2) = File::Spec->splitpath( $dest_file );
+
+    my $rel_path = File::Spec->abs2rel ( $self->{'destination'},
+                                         $dest_file_dir );
+
+    $rel_path .= "/" if $rel_path;
+
+    return $rel_path;
+
+};
+
 1;
 
 __END__
@@ -169,7 +187,9 @@ __END__
     my $staticvolt = StaticVolt->new;  # Default configuration
     $staticvolt->compile;
 
-=method C<new>
+=over
+
+=item C<new>
 
 Accepts an optional hash with the following parameters:
 
@@ -206,13 +226,15 @@ are placed in this directory. By default, it is set to C<_site>.
 
 =back
 
-=method C<compile>
+=item C<compile>
 
 Each file in the L</C<source>> directory is checked to see if it has a
 registered convertor as well as a YAML configuration at the beginning. All such
 files are compiled considering the L</YAML Configuration Keys> and the compiled
 output is placed in the L</C<destination>> directory. The rest of the files are
 copied over to the L</C<destination>> without compiling.
+
+=back
 
 =head2 YAML Configuration Keys
 
@@ -269,6 +291,36 @@ compiled L</C<source>> file.
 
 These keys will be available for use in the same page as well as in the layout.
 In the above example, C<drink> is a custom key.
+
+=back
+
+=head2 Pre-defined template variables
+
+Some variables are automatically made available to the
+templates. Apart from C<content> described elsewhere, these are all
+prefixed C<sv_> to differentiate them from user variables.
+
+=over
+
+=item sv_rel_base
+
+If the generated web-site is being used without a web-server (i.e. just
+on the local file-system), or perhaps if it may be moved around in the
+web-server hierarchy, then absolute URIs to shared resouces like CSS
+or JS will not work.
+
+Relative paths can be used in these situations.
+
+C<sv-rel-base> provides a relative path from the source file being
+processed to the top of the generated web-site. This means that layout
+files can refer to shared files like CSS using the following in a
+layout file:
+
+    <link rel="stylesheet" type="text/css" href="[% sv_rel_base %]css/bootstrap.css" />
+
+For top level source files, this expands to C<./>. For any
+sub-directories, it expands to C<../>, C<../../> etc. Sub-directory
+expansions always include the trailing slash.
 
 =back
 
