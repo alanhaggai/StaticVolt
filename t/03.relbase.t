@@ -5,7 +5,7 @@ use warnings;
 
 use File::Spec;
 use File::Path qw( make_path );
-use Test::More 'tests' => 8;
+use Test::More 'tests' => 11;
 
 use StaticVolt;
 
@@ -54,3 +54,17 @@ is $staticvolt->_relative_path ( File::Spec->catfile( 't', '_site', 'dir1', 'dir
     '../../', 'sub-subdir (level 2)';
 is $staticvolt->_relative_path ( File::Spec->catfile( 't', '_site', 'dir1', 'dir2', 'dir3', 'file3' ) ),
     '../../../', 'sub-sub-subdir (level 3)';
+
+# And some tests with a single level _site dir.
+$staticvolt = StaticVolt->new(
+    'includes'    => File::Spec->catfile( 't', '_includes' ),
+    'layouts'     => File::Spec->catfile( 't', '_layouts' ),
+    'source'      => File::Spec->catfile( 't', '_source' ),
+    'destination' => File::Spec->catfile( '_site' ),
+    );
+isa_ok $staticvolt, 'StaticVolt';
+
+is $staticvolt->_relative_path ( File::Spec->catfile( '_site', 'file0' ) ),
+    './', 'Top dir (level 0)';
+is $staticvolt->_relative_path ( File::Spec->catfile( '_site', 'dir1', 'file1' ) ),
+    '../', 'subdir (level 1)';
