@@ -415,6 +415,10 @@ I<FooBar>:
 
 L<StaticVolt> is inspired by Tom Preston-Werner's L<Jekyll|http://jekyllrb.com/>.
 
+=head1 Contributors
+
+L<Gavin Shelley|https://github.com/columbusmonkey>
+
 =head1 Acknowledgements
 
 L<Shlomi Fish|http://www.shlomifish.org/> for suggesting change of licence.
