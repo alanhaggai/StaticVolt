@@ -415,6 +415,15 @@ I<FooBar>:
 
 L<StaticVolt> is inspired by Tom Preston-Werner's L<Jekyll|http://jekyllrb.com/>.
 
+=head1 Success Stories
+
+Charles Wimmer successfully uses StaticVolt to generate and maintain his
+L<website|http://www.wimmer.net/>. He describes it in his
+L<post|http://www.wimmer.net/sysadmin/2012/08/11/hosting-a-static-website-in-the-cloud/>.
+
+If you wish to have your website listed here, please send an e-mail to
+C<haggai@cpan.org>, and I will be glad to list it here. :-)
+
 =head1 Contributors
 
 L<Gavin Shelley|https://github.com/columbusmonkey>
