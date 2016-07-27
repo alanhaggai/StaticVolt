@@ -1,6 +1,9 @@
 # ABSTRACT: Static website generator
 
 package StaticVolt;
+{
+  $StaticVolt::VERSION = '1.00';
+}
 
 use strict;
 use warnings;
@@ -21,7 +24,7 @@ use StaticVolt::Convertor::Textile;
 
 sub new {
     my ( $class, %config ) = @_;
-
+	
     my %config_defaults = (
         'includes'    => '_includes',
         'layouts'     => '_layouts',
@@ -59,7 +62,7 @@ sub _gather_files {
     my $self = shift;
 
     my $source = $self->{'source'};
-    find sub { _traverse_files $self }, $source;
+    find sub { _traverse_files($self) }, $source;
 
     return;
 }
@@ -76,8 +79,8 @@ sub _extract_file_config {
             }
             push @yaml_lines, $line;
         }
-
-        return Load join '', @yaml_lines;
+	my $yaml_lines = join '', @yaml_lines;
+        return Load $yaml_lines;
     }
 }
 
@@ -123,9 +126,28 @@ sub compile {
         my $file_layout      = $file_config->{'layout'};
         my $includes         = $self->{'includes'};
         my $layouts          = $self->{'layouts'};
-        my $abs_include_path = File::Spec->catfile( getcwd, $includes );
-        my $abs_layout_path =
+        
+        # BUGFIX 1
+        # If you create the StaticVolt with different absolute layout, includes etc. directories
+        # and therefore start $stratovolt->compile from a different cwd than the directory
+        # which contains _includes, _layouts etc, don't use getcwd
+        my $abs_include_path;
+        my $abs_layout_path;
+        
+       	if (File::Spec->file_name_is_absolute( $includes ) ) {
+        	$abs_include_path = File::Spec->catfile( $includes );
+        }
+        else {
+        	$abs_include_path = File::Spec->catfile( getcwd, $includes );
+        }
+        if (File::Spec->file_name_is_absolute( $layouts ) ) {
+        	$abs_layout_path =
+          File::Spec->catfile( $layouts, $file_layout );
+        }
+        else {
+        	$abs_layout_path =
           File::Spec->catfile( getcwd, $layouts, $file_layout );
+        }
         my $template = Template->new(
             'INCLUDE_PATH' => $abs_include_path,
             'WRAPPER'      => $abs_layout_path,
@@ -179,6 +201,16 @@ sub _relative_path {
 1;
 
 __END__
+
+=pod
+
+=head1 NAME
+
+StaticVolt - Static website generator
+
+=head1 VERSION
+
+version 1.00
 
 =head1 SYNOPSIS
 
@@ -435,3 +467,17 @@ L<Shlomi Fish|http://www.shlomifish.org/> for suggesting change of licence.
 =head1 See Also
 
 L<Template Toolkit|Template>
+
+=head1 AUTHOR
+
+Alan Haggai Alavi <haggai@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2013 by Alan Haggai Alavi.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0 (GPL Compatible)
+
+=cut
