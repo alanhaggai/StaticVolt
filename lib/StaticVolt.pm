@@ -19,9 +19,9 @@ use YAML;
 
 use Data::Dumper;
 
-use base qw( PLog::Generator::Convertor );
+use base qw( StaticVolt::Convertor );
 
-use PLog::Generator::Convertor::Textile;
+use StaticVolt::Convertor::Textile;
 
 sub new {
     my ( $class, %config ) = @_;
