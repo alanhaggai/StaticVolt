@@ -1,6 +1,6 @@
 # ABSTRACT: Static website_ generator
 
-package StaticVolt
+package StaticVolt;
 {
   $StaticVolt::VERSION = '1.00';
 }
