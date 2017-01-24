@@ -2,7 +2,7 @@
 
 package StaticVolt::Convertor::Textile;
 {
-  $StaticVolt::Convertor::Textile::VERSION = '1.00';
+  $PLog::Generator::Convertor::Textile::VERSION = '1.00';
 }
 
 use strict;
@@ -14,10 +14,9 @@ use Text::Textile qw( textile );
 
 sub convert {
     my $content = shift;
-    my $textile=Text::Textile->new();
-	$textile->charset('utf-8');
-	my $html_content = $textile->process($content);
-    return $html_content;
+    my $textile = Text::Textile->new(	'disable_encode_entities' => 1,
+					'charset' => 'utf-8' );
+    return $textile->process($content);
 }
 
 __PACKAGE__->register(qw/ textile /);
